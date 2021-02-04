@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nontonkuy.R
 import com.example.nontonkuy.data.ResultsItemListTvShow
@@ -39,8 +41,8 @@ class TvShowListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = TvShowListViewModel()
-        viewModel.setListTvShow()
-        viewModel.getListTvShow().observe(this, Observer { listTvShow ->
+        viewModel.setListTvShow(context)
+        viewModel.getListTvShow().observe(viewLifecycleOwner, Observer { listTvShow ->
             if (listTvShow.size > 0){
                 adapter = TvShowListAdapter(listTvShow)
                 adapter.notifyDataSetChanged()
@@ -62,7 +64,7 @@ class TvShowListFragment : Fragment() {
             } else {
                 setVisible(binding.ivNodata)
                 setGone(binding.pbTvshow)
-                Log.d("TvShowFragment","onFailure: Data tidak ada")
+                Toast.makeText(context,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
 

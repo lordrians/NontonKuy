@@ -23,6 +23,7 @@
     <string name="recomendation_tvshow">Recomendation TvShow</string>
     <string name="season_episode_content">3 / 23</string>
     <string name="status_content">Returning Series</string>
+    <string name="there_is_no_data_laoded">There is no data loaded</string>
     <string-array name="TAB_TITLES_MAIN">
         <item>Movie</item>
         <item>TV Show</item>

@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.nontonkuy.R
 import com.example.nontonkuy.data.ResultsItemListMovie
 import com.example.nontonkuy.databinding.FragmentMovieListBinding
 import com.example.nontonkuy.ui.adapter.MovieListAdapter
@@ -40,7 +42,7 @@ class MovieListFragment : Fragment() {
         viewModel = MovieListViewModel()
 
 
-        viewModel.setListMovie()
+        viewModel.setListMovie(context)
         viewModel.getListMovie().observe(viewLifecycleOwner, Observer { listMovie ->
             if (listMovie.size > 0){
 
@@ -63,7 +65,7 @@ class MovieListFragment : Fragment() {
             } else {
                 setVisible(binding.ivNodata)
                 setGone(binding.pbMovie)
-                Log.d("MovieListFragment","onFailure: Data tidak ada")
+                Toast.makeText(context,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
 

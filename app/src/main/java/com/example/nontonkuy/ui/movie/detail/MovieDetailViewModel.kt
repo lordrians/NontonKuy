@@ -1,6 +1,8 @@
 package com.example.nontonkuy.ui.movie.detail
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,12 +28,13 @@ class MovieDetailViewModel: ViewModel() {
         private const val TAG = "MovieDetailViewModel"
     }
 
-    fun setMovieDetail(idMovie: String?){
+    fun setMovieDetail(mContext: Context?,idMovie: String?){
         EspressoIdlingResource.increment()
         clientDetail = ApiConfig.getApiService().getDetailMovie(idMovie)
         clientDetail.enqueue(object : Callback<ResponseDetailMovie>{
             override fun onFailure(call: Call<ResponseDetailMovie>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message.toString()}")
+//                Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -40,10 +43,11 @@ class MovieDetailViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    movie.postValue(response.body())
+//                    movie.postValue(response.body())
+                    movie.value = response.body()
                 }
                 else
-                    Log.d(TAG, "onFailure: ${response.message()}")
+                    Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -52,21 +56,23 @@ class MovieDetailViewModel: ViewModel() {
         return movie
     }
 
-    fun setRecomendationsMovie(idMovie: String?){
+    fun setRecomendationsMovie(mContext: Context?,idMovie: String?){
         EspressoIdlingResource.increment()
         client = ApiConfig.getApiService().getRecomendationMovie(idMovie)
         client.enqueue(object : Callback<ResponseListMovie>{
             override fun onFailure(call: Call<ResponseListMovie>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message.toString()}")
+//                Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<ResponseListMovie>, response: Response<ResponseListMovie>) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    recMovies.postValue(response.body()?.results)
+//                    recMovies.postValue(response.body()?.results)
+                    recMovies.value = response.body()?.results
                 }
                 else
-                    Log.d(TAG, "onFailure: ${response.message()}")
+                    Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
             }
         })
     }

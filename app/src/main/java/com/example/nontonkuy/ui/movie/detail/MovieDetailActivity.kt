@@ -5,10 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.nontonkuy.BuildConfig
+import com.example.nontonkuy.R
 import com.example.nontonkuy.data.ResponseListMovie
 import com.example.nontonkuy.data.ResultsItemListMovie
 import com.example.nontonkuy.databinding.ActivityMovieDetailBinding
@@ -46,7 +48,7 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun settingRecomendation() {
-        viewModel.setRecomendationsMovie(idMovie.toString())
+        viewModel.setRecomendationsMovie(this,idMovie.toString())
         viewModel.getRecomendationsMovie().observe(this, Observer { listRecomendation ->
             if (listRecomendation.size > 0){
                 adapter = RecomendationMovieAdapter(listRecomendation)
@@ -67,13 +69,17 @@ class MovieDetailActivity : AppCompatActivity() {
                 setVisible(binding.rvRecomendedMov)
                 setGone(binding.pbMovieDetailRec)
 
+            } else {
+                setVisible(binding.rvRecomendedMov)
+                setGone(binding.pbMovieDetailRec)
+                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     @SuppressLint("SetTextI18n")
     private fun fillingData() {
-        viewModel.setMovieDetail(idMovie.toString())
+        viewModel.setMovieDetail(this,idMovie.toString())
         viewModel.getDetailMovie().observe(this, Observer { movies ->
             if (movies != null){
                 with(binding){
@@ -109,6 +115,10 @@ class MovieDetailActivity : AppCompatActivity() {
                     setGone(binding.pbMovieDetail)
 
                 }
+            } else {
+                setVisible(binding.containerMovieDetail)
+                setGone(binding.pbMovieDetail)
+                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
     }

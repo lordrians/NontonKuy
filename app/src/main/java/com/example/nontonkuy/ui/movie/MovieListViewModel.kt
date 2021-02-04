@@ -1,6 +1,8 @@
 package com.example.nontonkuy.ui.movie
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,12 +24,13 @@ class MovieListViewModel : ViewModel() {
         private const val TAG = "MovieListViewModel"
     }
 
-    fun setListMovie(){
+    fun setListMovie(mContext: Context?){
         EspressoIdlingResource.increment()
         client = ApiConfig.getApiService().getPopularMovie()
         client.enqueue(object : Callback<ResponseListMovie>{
             override fun onFailure(call: Call<ResponseListMovie>, t: Throwable) {
                 Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -36,10 +39,11 @@ class MovieListViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    listMovie.postValue(response.body()?.results)
+//                    listMovie.postValue(response.body()?.results)
+                    listMovie.value = response.body()?.results
                 }
                 else {
-                    Log.d(TAG, "onFailure: ${response.message()}")
+                    Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
         })

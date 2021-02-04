@@ -1,6 +1,8 @@
 package com.example.nontonkuy.ui.tvshow
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,12 +24,13 @@ class TvShowListViewModel: ViewModel() {
         private const val TAG = "TvShowListViewModel"
     }
 
-    fun setListTvShow(){
+    fun setListTvShow(mContext: Context?){
         EspressoIdlingResource.increment()
         client = ApiConfig.getApiService().getPopularTvShow()
         client.enqueue(object : Callback<ResponseListTvShow>{
             override fun onFailure(call: Call<ResponseListTvShow>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message.toString()}")
+//                Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -36,10 +39,12 @@ class TvShowListViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    listTvShow.postValue(response.body()?.results)
+//                    listTvShow.postValue(response.body()?.results)
+                    listTvShow.value = response.body()?.results
                 }
                 else
-                    Log.d(TAG, "onFailure: ${response.message()}")
+//                    Log.d(TAG, "onFailure: ${response.message()}")
+                Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
             }
         })
     }

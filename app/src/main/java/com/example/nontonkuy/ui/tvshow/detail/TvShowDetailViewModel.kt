@@ -1,6 +1,8 @@
 package com.example.nontonkuy.ui.tvshow.detail
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,12 +28,13 @@ class TvShowDetailViewModel: ViewModel() {
         private const val TAG = "TvShowDetailViewModel"
     }
 
-    fun setTvShowDetail(idTvShow: String?){
+    fun setTvShowDetail(mContext: Context?, idTvShow: String?){
         EspressoIdlingResource.increment()
         clientDetail = ApiConfig.getApiService().getDetailTvShow(idTvShow)
         clientDetail.enqueue(object : Callback<ResponseDetailTvShow>{
             override fun onFailure(call: Call<ResponseDetailTvShow>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message.toString()}")
+//                Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -40,10 +43,11 @@ class TvShowDetailViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    tvshow.postValue(response.body())
+//                    tvshow.postValue(response.body())
+                    tvshow.value = response.body()
                 }
                 else
-                    Log.d(TAG, "onFailure: ${response.message()}")
+                    Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -52,12 +56,13 @@ class TvShowDetailViewModel: ViewModel() {
         return tvshow
     }
 
-    fun setRecomendationTvShow(idTvShow: String?){
+    fun setRecomendationTvShow(mContext: Context?, idTvShow: String?){
         EspressoIdlingResource.increment()
         clientRec = ApiConfig.getApiService().getRecomendationTvShow(idTvShow)
         clientRec.enqueue(object : Callback<ResponseListTvShow>{
             override fun onFailure(call: Call<ResponseListTvShow>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message.toString()}")
+//                Log.d(TAG, "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext,"onFailure: ${t.message.toString()}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -66,10 +71,11 @@ class TvShowDetailViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
-                    recTvShow.postValue(response.body()?.results)
+//                    recTvShow.postValue(response.body()?.results)
+                    recTvShow.value = response.body()?.results
                 }
                 else
-                    Log.d(TAG, "onFailure: ${response.message()}")
+                    Toast.makeText(mContext,"onFailure: ${response.message()}", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -43,7 +44,7 @@ class TvShowDetailActivity : AppCompatActivity() {
     }
 
     private fun settingRecomendation() {
-        viewModel.setRecomendationTvShow(idTvShow.toString())
+        viewModel.setRecomendationTvShow(this,idTvShow.toString())
         viewModel.getRecomendationTvShow().observe(this, Observer { listRecomendation ->
             if (listRecomendation.size > 0){
                 adapter = RecomendationTvShowAdapter(listRecomendation)
@@ -65,13 +66,14 @@ class TvShowDetailActivity : AppCompatActivity() {
                 setGone(binding.pbTvshowDetailRec)
             } else {
                 setGone(binding.pbTvshowDetailRec)
+                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     @SuppressLint("SetTextI18n")
     private fun fillingData() {
-        viewModel.setTvShowDetail(idTvShow.toString())
+        viewModel.setTvShowDetail(this,idTvShow.toString())
         viewModel.getDetailTvShow().observe(this, Observer { tvShow ->
             if (tvShow != null){
                 with(binding){
@@ -104,6 +106,7 @@ class TvShowDetailActivity : AppCompatActivity() {
                 }
             } else {
                 setGone(binding.pbTvshowDetail)
+                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
             }
         })
     }
