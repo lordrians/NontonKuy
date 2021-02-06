@@ -1,10 +1,8 @@
 package com.example.nontonkuy.ui.tvshow
 
 import android.util.Log
-import com.example.nontonkuy.data.ResponseListTvShow
+import com.example.nontonkuy.data.source.remote.response.ResponseListTvShow
 import com.example.nontonkuy.retrofit.ApiConfig
-import junit.framework.TestCase
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

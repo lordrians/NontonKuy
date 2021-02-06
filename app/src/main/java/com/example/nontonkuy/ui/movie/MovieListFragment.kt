@@ -2,21 +2,22 @@ package com.example.nontonkuy.ui.movie
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nontonkuy.R
-import com.example.nontonkuy.data.ResultsItemListMovie
+import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
 import com.example.nontonkuy.databinding.FragmentMovieListBinding
 import com.example.nontonkuy.ui.adapter.MovieListAdapter
 import com.example.nontonkuy.ui.movie.detail.MovieDetailActivity
 import com.example.nontonkuy.ui.movie.detail.MovieDetailActivity.Companion.ID_MOVIE
-import com.example.nontonkuy.utils.EspressoIdlingResource
+import com.example.nontonkuy.utils.MovieViewModelFactory
 import com.example.nontonkuy.utils.setGone
 import com.example.nontonkuy.utils.setGridPixel
 import com.example.nontonkuy.utils.setVisible
@@ -39,35 +40,32 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = MovieListViewModel()
+        loadData()
 
+    }
 
-        viewModel.setListMovie(context)
-        viewModel.getListMovie().observe(viewLifecycleOwner, Observer { listMovie ->
-            if (listMovie.size > 0){
+    private fun loadData() {
+        val factory = MovieViewModelFactory.getInstance(requireActivity())
+        val viewModels = ViewModelProvider(this, factory)[MovieListViewModel::class.java]
 
-                adapter = MovieListAdapter(listMovie)
-                adapter.notifyDataSetChanged()
-                binding.rvMovie.setHasFixedSize(true)
-                binding.rvMovie.layoutManager = context?.let { setGridPixel(it) }?.let { GridLayoutManager(context, it) }
-                binding.rvMovie.adapter = adapter
+        viewModels.getMovies().observe(viewLifecycleOwner) { movies ->
+            adapter = MovieListAdapter(movies)
+            adapter.notifyDataSetChanged()
+            binding.rvMovie.layoutManager = context?.let { setGridPixel(it) }?.let { GridLayoutManager(context, it) }
+            binding.rvMovie.adapter = adapter
 
-                adapter.setOnItemClickCallback(object : MovieListAdapter.OnItemClickCallback{
-                    override fun onItemClicked(data: ResultsItemListMovie) {
-                        val intent = Intent(context, MovieDetailActivity::class.java)
-                        intent.putExtra(ID_MOVIE, data.id)
-                        startActivity(intent)
-                    }
-                })
+            adapter.setOnItemClickCallback(object : MovieListAdapter.OnItemClickCallback{
+                override fun onItemClicked(data: ResultsItemListMovie) {
+                    val intent = Intent(context, MovieDetailActivity::class.java)
+                    intent.putExtra(ID_MOVIE, data.id)
+                    startActivity(intent)
+                }
+            })
 
-                setVisible(binding.rvMovie)
-                setGone(binding.pbMovie)
-            } else {
-                setVisible(binding.ivNodata)
-                setGone(binding.pbMovie)
-                Toast.makeText(context,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
-            }
-        })
+            setVisible(binding.rvMovie)
+            setGone(binding.pbMovie)
+        }
+
 
     }
 

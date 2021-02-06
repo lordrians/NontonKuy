@@ -1,14 +1,13 @@
 package com.example.nontonkuy.retrofit
 
 import com.example.nontonkuy.BuildConfig
-import com.example.nontonkuy.data.ResponseDetailMovie
-import com.example.nontonkuy.data.ResponseDetailTvShow
-import com.example.nontonkuy.data.ResponseListMovie
-import com.example.nontonkuy.data.ResponseListTvShow
+import com.example.nontonkuy.data.source.remote.response.ResponseDetailMovie
+import com.example.nontonkuy.data.source.remote.response.ResponseDetailTvShow
+import com.example.nontonkuy.data.source.remote.response.ResponseListMovie
+import com.example.nontonkuy.data.source.remote.response.ResponseListTvShow
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
 

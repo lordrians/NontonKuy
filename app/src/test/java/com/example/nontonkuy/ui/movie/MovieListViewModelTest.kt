@@ -1,7 +1,7 @@
 package com.example.nontonkuy.ui.movie
 
 import android.util.Log
-import com.example.nontonkuy.data.ResponseListMovie
+import com.example.nontonkuy.data.source.remote.response.ResponseListMovie
 import com.example.nontonkuy.retrofit.ApiConfig
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.nontonkuy.BuildConfig
-import com.example.nontonkuy.data.ResultsItemListMovie
+import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
 import com.example.nontonkuy.databinding.ItemGridBinding
 
 class MovieListAdapter(
