@@ -1,12 +1,12 @@
-package com.example.nontonkuy.utils
+package com.example.nontonkuy.ui.movie
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.nontonkuy.data.source.repository.MovieRepository
 import com.example.nontonkuy.di.MovieInjection
-import com.example.nontonkuy.ui.movie.MovieListViewModel
 import com.example.nontonkuy.ui.movie.detail.MovieDetailViewModel
+import com.example.nontonkuy.ui.movie.main.MovieListViewModel
 
 class MovieViewModelFactory private constructor(
         private val movieRepository: MovieRepository
@@ -17,8 +17,10 @@ class MovieViewModelFactory private constructor(
         private var instance: MovieViewModelFactory? = null
 
         fun getInstance(mContext: Context): MovieViewModelFactory =
-                instance ?: synchronized(this){
-                    instance ?: MovieViewModelFactory(MovieInjection.provideRepository(mContext))
+                instance
+                        ?: synchronized(this){
+                    instance
+                            ?: MovieViewModelFactory(MovieInjection.provideRepository(mContext))
                 }
     }
 

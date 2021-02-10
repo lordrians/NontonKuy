@@ -10,8 +10,6 @@ import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
 import com.example.nontonkuy.utils.Resource
 
 interface MovieDataSource {
-    fun getMovies(): MutableLiveData<ArrayList<ResultsItemListMovie>>
-    fun getDetailMovie(idMovie: String?) : MutableLiveData<ResponseDetailMovie>
     fun getRecomendation(idMovie: String?) : MutableLiveData<ArrayList<ResultsItemListMovie>>
 
     fun getListMovie(): LiveData<Resource<PagedList<MovieEntity>>>

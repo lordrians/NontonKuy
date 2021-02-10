@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.nontonkuy.R
-import com.example.nontonkuy.ui.movie.MovieListFragment
-import com.example.nontonkuy.ui.tvshow.TvShowListFragment
+import com.example.nontonkuy.ui.movie.main.MovieListFragment
+import com.example.nontonkuy.ui.tvshow.main.TvShowListFragment
 
 class VpMainAdapter (
     private val fm: FragmentActivity

@@ -2,8 +2,8 @@ package com.example.nontonkuy.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.nontonkuy.data.source.remote.ApiResponse
-import com.example.nontonkuy.data.source.remote.StatusResponse
+import com.example.nontonkuy.utils.ApiResponse
+import com.example.nontonkuy.utils.StatusResponse
 import com.example.nontonkuy.utils.AppExecutors
 import com.example.nontonkuy.utils.Resource
 

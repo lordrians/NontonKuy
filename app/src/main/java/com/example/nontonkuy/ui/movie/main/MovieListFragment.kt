@@ -1,4 +1,4 @@
-package com.example.nontonkuy.ui.movie
+package com.example.nontonkuy.ui.movie.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,15 +11,13 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nontonkuy.R
 import com.example.nontonkuy.data.source.local.entity.MovieEntity
-import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
 import com.example.nontonkuy.databinding.FragmentMovieListBinding
 import com.example.nontonkuy.ui.adapter.MovieAdapter
-import com.example.nontonkuy.ui.adapter.MovieListAdapter
+import com.example.nontonkuy.ui.movie.MovieViewModelFactory
 import com.example.nontonkuy.ui.movie.detail.MovieDetailActivity
 import com.example.nontonkuy.ui.movie.detail.MovieDetailActivity.Companion.ID_MOVIE
 import com.example.nontonkuy.utils.*
@@ -27,8 +25,6 @@ import com.example.nontonkuy.utils.*
 class MovieListFragment : Fragment() , MovieAdapter.OnItemClickCallback{
 
     private lateinit var binding: FragmentMovieListBinding
-    private lateinit var viewModel: MovieListViewModel
-    private lateinit var adapter: MovieListAdapter
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
@@ -73,40 +69,15 @@ class MovieListFragment : Fragment() , MovieAdapter.OnItemClickCallback{
                 }
                 Status.ERROR -> {
                     showProgressBar(false)
+                    setVisible(binding.ivNodata)
                     Toast.makeText(context, resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-//    private fun loadData() {
-//        val factory = MovieViewModelFactory.getInstance(requireActivity())
-//        val viewModels = ViewModelProvider(this, factory)[MovieListViewModel::class.java]
-//
-//        viewModels.getMovies().observe(viewLifecycleOwner) { movies ->
-//            adapter = MovieListAdapter(movies)
-//            adapter.notifyDataSetChanged()
-//            binding.rvMovie.layoutManager = context?.let { setGridPixel(it) }?.let { GridLayoutManager(context, it) }
-//            binding.rvMovie.adapter = adapter
-//
-//            adapter.setOnItemClickCallback(object : MovieListAdapter.OnItemClickCallback{
-//                override fun onItemClicked(data: ResultsItemListMovie) {
-//                    val intent = Intent(context, MovieDetailActivity::class.java)
-//                    intent.putExtra(ID_MOVIE, data.id)
-//                    startActivity(intent)
-//                }
-//            })
-//
-//            setVisible(binding.rvMovie)
-//            setGone(binding.pbMovie)
-//        }
-//
-//
-//    }
-
     private fun showProgressBar(state: Boolean){
         binding.pbMovie.isVisible = state
-        binding.ivNodata.isVisible = state
         binding.rvMovie.isInvisible = state
     }
 

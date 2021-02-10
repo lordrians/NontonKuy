@@ -1,4 +1,4 @@
-package com.example.nontonkuy.data.source.remote
+package com.example.nontonkuy.utils
 
 enum class StatusResponse {
     SUCCESS,

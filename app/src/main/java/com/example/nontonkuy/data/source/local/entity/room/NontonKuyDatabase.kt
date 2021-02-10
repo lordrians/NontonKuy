@@ -5,15 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.nontonkuy.data.source.local.entity.MovieEntity
+import com.example.nontonkuy.data.source.local.entity.TvShowEntity
 
 @Database(
-    entities = [MovieEntity::class],
+    entities = [MovieEntity::class, TvShowEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class NontonKuyDatabase : RoomDatabase(){
 
     abstract fun movieDao(): MovieDao
+    abstract fun tvShowDao(): TvShowDao
 
     companion object {
         @Volatile

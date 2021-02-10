@@ -1,12 +1,12 @@
-package com.example.nontonkuy.utils
+package com.example.nontonkuy.ui.tvshow
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.nontonkuy.data.source.repository.TvShowRepository
 import com.example.nontonkuy.di.TvShowInjection
-import com.example.nontonkuy.ui.tvshow.TvShowListViewModel
 import com.example.nontonkuy.ui.tvshow.detail.TvShowDetailViewModel
+import com.example.nontonkuy.ui.tvshow.main.TvShowListViewModel
 
 class TvShowViewModelFactory private constructor(
         private val tvShowRepository: TvShowRepository
@@ -17,8 +17,10 @@ class TvShowViewModelFactory private constructor(
         private var instance: TvShowViewModelFactory? = null
 
         fun getInstance(mContext: Context): TvShowViewModelFactory =
-                instance ?: synchronized(this){
-                    instance ?: TvShowViewModelFactory(TvShowInjection.provideRespository(mContext))
+                instance
+                        ?: synchronized(this){
+                    instance
+                            ?: TvShowViewModelFactory(TvShowInjection.provideRespository(mContext))
                 }
     }
 

@@ -7,7 +7,7 @@ class TvShowDetailViewModel(
         private val tvShowRepository: TvShowRepository
 ): ViewModel() {
 
-    fun getDetailTvShow(idTvShow: String?) = tvShowRepository.getDetailTvShow(idTvShow)
+    fun getDetailTvShow(idTvShow: String?) = tvShowRepository.getDetailTvShows(idTvShow)
     fun getRecomendationTvShow(idTvShow: String?) = tvShowRepository.getRecomendation(idTvShow)
 
 }

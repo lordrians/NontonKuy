@@ -1,19 +1,20 @@
-package com.example.nontonkuy.data.source.local.entity
+package com.example.nontonkuy.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.sqlite.db.SimpleSQLiteQuery
+import com.example.nontonkuy.data.source.local.entity.MovieEntity
 import com.example.nontonkuy.data.source.local.entity.room.MovieDao
 
-class LocalDataSource(
+class MovieLocalDataSource(
     private val mMovieDao: MovieDao
 ) {
 
     companion object {
-        private var INSTANCE: LocalDataSource? = null
+        private var INSTANCE: MovieLocalDataSource? = null
         fun getInstance(
             movieDao: MovieDao
-        ): LocalDataSource = INSTANCE ?: LocalDataSource(movieDao)
+        ): MovieLocalDataSource = INSTANCE
+                ?: MovieLocalDataSource(movieDao)
     }
 
     fun getListMovie(): DataSource.Factory<Int, MovieEntity> = mMovieDao.getListMovie()
@@ -33,5 +34,6 @@ class LocalDataSource(
         movie.isFav = newState
         mMovieDao.updateMovie(movie)
     }
+
 
 }

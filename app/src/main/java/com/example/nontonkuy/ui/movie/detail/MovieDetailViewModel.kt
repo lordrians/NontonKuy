@@ -7,7 +7,6 @@ class MovieDetailViewModel(
         private val movieRepository: MovieRepository
 ): ViewModel() {
 
-    fun getDetailMovie(idMovie: String?) = movieRepository.getDetailMovie(idMovie)
     fun getRecomendationMovie(idMovie: String?) = movieRepository.getRecomendation(idMovie)
 
 

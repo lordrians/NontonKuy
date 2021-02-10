@@ -1,7 +1,7 @@
 package com.example.nontonkuy.di
 
 import android.content.Context
-import com.example.nontonkuy.data.source.local.entity.LocalDataSource
+import com.example.nontonkuy.data.source.local.MovieLocalDataSource
 import com.example.nontonkuy.data.source.local.entity.room.NontonKuyDatabase
 import com.example.nontonkuy.data.source.repository.MovieRepository
 import com.example.nontonkuy.data.source.remote.movie.MovieRemoteDataSource
@@ -13,7 +13,7 @@ object MovieInjection {
         val database = NontonKuyDatabase.getInstance(mContext)
 
         val remoteDataSource = MovieRemoteDataSource.getInstance()
-        val localDataSource = LocalDataSource.getInstance(database.movieDao())
+        val localDataSource = MovieLocalDataSource.getInstance(database.movieDao())
         val appExecutors = AppExecutors()
         return MovieRepository.getInstance(remoteDataSource,localDataSource,appExecutors)
     }

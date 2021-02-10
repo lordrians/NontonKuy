@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.movie.MovieListFragment">
+    tools:context=".ui.movie.main.MovieListFragment">
 
     <ProgressBar
         android:id="@+id/pb_movie"
@@ -30,7 +30,6 @@
         android:id="@+id/rv_movie"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

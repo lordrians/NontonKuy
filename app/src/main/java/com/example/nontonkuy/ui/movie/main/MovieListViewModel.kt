@@ -1,4 +1,4 @@
-package com.example.nontonkuy.ui.movie
+package com.example.nontonkuy.ui.movie.main
 
 import androidx.lifecycle.ViewModel
 import com.example.nontonkuy.data.source.repository.MovieRepository

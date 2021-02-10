@@ -15,6 +15,7 @@ import com.example.nontonkuy.R
 import com.example.nontonkuy.data.source.local.entity.MovieEntity
 import com.example.nontonkuy.databinding.ActivityMovieDetailBinding
 import com.example.nontonkuy.ui.adapter.RecomendationMovieAdapter
+import com.example.nontonkuy.ui.movie.MovieViewModelFactory
 import com.example.nontonkuy.utils.*
 
 class MovieDetailActivity : AppCompatActivity() {
