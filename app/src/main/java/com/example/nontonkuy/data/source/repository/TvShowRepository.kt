@@ -1,7 +1,8 @@
-package com.example.nontonkuy.data.source
+package com.example.nontonkuy.data.source.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.nontonkuy.data.source.remote.TvShowRemoteDataSource
+import com.example.nontonkuy.data.source.TvShowDataSource
+import com.example.nontonkuy.data.source.remote.tvshow.TvShowRemoteDataSource
 import com.example.nontonkuy.data.source.remote.response.ResponseDetailTvShow
 import com.example.nontonkuy.data.source.remote.response.ResultsItemListTvShow
 
@@ -14,8 +15,10 @@ class TvShowRepository private constructor(
                 private var instance: TvShowRepository? = null
 
                 fun getInstance(remoteData: TvShowRemoteDataSource): TvShowRepository =
-                        instance ?: synchronized(this) {
-                                instance ?: TvShowRepository(remoteData)
+                        instance
+                                ?: synchronized(this) {
+                                instance
+                                        ?: TvShowRepository(remoteData)
                         }
         }
 

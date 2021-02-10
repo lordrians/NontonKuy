@@ -1,4 +1,4 @@
-package com.example.nontonkuy.data.source.remote
+package com.example.nontonkuy.data.source.remote.tvshow
 
 import android.util.Log
 import com.example.nontonkuy.data.source.remote.response.ResponseDetailTvShow
@@ -17,8 +17,10 @@ class TvShowRemoteDataSource {
         private var instance: TvShowRemoteDataSource? = null
 
         fun getInstance(): TvShowRemoteDataSource =
-                instance ?: synchronized(this){
-                    instance ?: TvShowRemoteDataSource()
+                instance
+                        ?: synchronized(this){
+                    instance
+                            ?: TvShowRemoteDataSource()
                 }
     }
 

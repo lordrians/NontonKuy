@@ -3,7 +3,7 @@ package com.example.nontonkuy.utils
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.nontonkuy.data.source.TvShowRepository
+import com.example.nontonkuy.data.source.repository.TvShowRepository
 import com.example.nontonkuy.di.TvShowInjection
 import com.example.nontonkuy.ui.tvshow.TvShowListViewModel
 import com.example.nontonkuy.ui.tvshow.detail.TvShowDetailViewModel

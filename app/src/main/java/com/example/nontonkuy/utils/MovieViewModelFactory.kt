@@ -3,7 +3,7 @@ package com.example.nontonkuy.utils
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.nontonkuy.data.source.MovieRepository
+import com.example.nontonkuy.data.source.repository.MovieRepository
 import com.example.nontonkuy.di.MovieInjection
 import com.example.nontonkuy.ui.movie.MovieListViewModel
 import com.example.nontonkuy.ui.movie.detail.MovieDetailViewModel

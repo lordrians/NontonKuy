@@ -1,26 +1,21 @@
 package com.example.nontonkuy.ui.movie.detail
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.nontonkuy.BuildConfig
 import com.example.nontonkuy.R
-import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
+import com.example.nontonkuy.data.source.local.entity.MovieEntity
 import com.example.nontonkuy.databinding.ActivityMovieDetailBinding
-import com.example.nontonkuy.ui.adapter.MovieListAdapter
 import com.example.nontonkuy.ui.adapter.RecomendationMovieAdapter
-import com.example.nontonkuy.utils.MovieViewModelFactory
-import com.example.nontonkuy.utils.setGone
-import com.example.nontonkuy.utils.setGridPixel
-import com.example.nontonkuy.utils.setVisible
+import com.example.nontonkuy.utils.*
 
 class MovieDetailActivity : AppCompatActivity() {
 
@@ -48,6 +43,57 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
+    private fun loadDetail() {
+        val factory = MovieViewModelFactory.getInstance(this)
+        viewModel = ViewModelProvider(this, factory)[MovieDetailViewModel::class.java]
+
+        viewModel.getDetailMovies(idMovie.toString()).observe(this) { detail ->
+            when (detail.status){
+                Status.LOADING -> showProgressBar(true)
+                Status.SUCCESS -> {
+                    if (detail.data != null){
+                        showProgressBar(false)
+                        fillingData(detail.data)
+                    }
+                }
+                Status.ERROR -> {
+                    showProgressBar(false)
+                    Toast.makeText(applicationContext, resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun fillingData(detailMovie: MovieEntity) {
+        with(binding){
+
+            tvMovdetailTitle.text = detailMovie.originalTitle
+
+            tvMovdetailGenre.text = detailMovie.genres
+
+            tvMovdetailDate.text = detailMovie.releaseDate
+            tvMovdetailRuntime.text = detailMovie.runtime.toString() + " min"
+            tvMovdetailBudget.text = detailMovie.budget.toString()
+            tvMovdetailRevenue.text = detailMovie.revenue.toString()
+            tvMovdetailDesc.text = detailMovie.overview
+
+            ivMovdetailBanner.let {
+                Glide.with(root.context)
+                        .load("${BuildConfig.PATH_ORIGINAL_IMG}${detailMovie.backdropPath}")
+                        .into(it)
+            }
+
+            ivMovdetailPoster.let {
+                Glide.with(root.context)
+                        .load("${BuildConfig.PATH_IMG}${detailMovie.posterPath}")
+                        .into(it)
+            }
+
+        }
+    }
+
+
     private fun loadRecomendation() {
         val factory = MovieViewModelFactory.getInstance(this)
         val viewModels = ViewModelProvider(this, factory)[MovieDetailViewModel::class.java]
@@ -58,64 +104,14 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.rvRecomendedMov.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.rvRecomendedMov.adapter = adapter
 
-            adapter.setOnItemClickCallback(object : RecomendationMovieAdapter.OnItemClickCallback{
-                override fun onItemClicked(data: ResultsItemListMovie) {
-                    val intent = Intent(applicationContext, MovieDetailActivity::class.java)
-                    intent.putExtra(ID_MOVIE, data.id)
-                    startActivity(intent)
-                }
-            })
-
             setVisible(binding.rvRecomendedMov)
             setGone(binding.pbMovieDetailRec)
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun loadDetail() {
-        val factory = MovieViewModelFactory.getInstance(this)
-        val viewModels =  ViewModelProvider(this, factory)[MovieDetailViewModel::class.java]
-
-        viewModels.getDetailMovie(idMovie.toString()).observe(this){detailMovie ->
-            if (detailMovie != null){
-                with(binding){
-                    var genres = ""
-                    tvMovdetailTitle.text = detailMovie.originalTitle
-
-                    if (detailMovie.genres?.size != 0) {
-                        for (item in detailMovie.genres!!){
-                            genres += item?.name + "; "
-                        }
-                    }
-                    tvMovdetailGenre.text = genres
-
-                    tvMovdetailDate.text = detailMovie.releaseDate
-                    tvMovdetailRuntime.text = detailMovie.runtime.toString() + "m"
-                    tvMovdetailBudget.text = detailMovie.budget.toString()
-                    tvMovdetailRevenue.text = detailMovie.revenue.toString()
-                    tvMovdetailDesc.text = detailMovie.overview
-
-                    ivMovdetailBanner.let {
-                        Glide.with(root.context)
-                                .load("${BuildConfig.PATH_ORIGINAL_IMG}${detailMovie.backdropPath}")
-                                .into(it)
-                    }
-
-                    ivMovdetailPoster.let {
-                        Glide.with(root.context)
-                                .load("${BuildConfig.PATH_IMG}${detailMovie.posterPath}")
-                                .into(it)
-                    }
-
-                    setVisible(binding.containerMovieDetail)
-                    setGone(binding.pbMovieDetail)
-                }
-            } else {
-                setVisible(binding.containerMovieDetail)
-                setGone(binding.pbMovieDetail)
-                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
-            }
-        }
+    private fun showProgressBar(state: Boolean){
+        binding.rvRecomendedMov.isInvisible = state
+        binding.pbMovieDetail.isVisible = state
     }
 
 }
