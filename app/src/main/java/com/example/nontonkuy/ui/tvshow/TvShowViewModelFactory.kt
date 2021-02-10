@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.nontonkuy.data.source.repository.TvShowRepository
 import com.example.nontonkuy.di.TvShowInjection
 import com.example.nontonkuy.ui.tvshow.detail.TvShowDetailViewModel
+import com.example.nontonkuy.ui.tvshow.favorite.TvShowFavoriteViewModel
 import com.example.nontonkuy.ui.tvshow.main.TvShowListViewModel
 
 class TvShowViewModelFactory private constructor(
@@ -32,6 +33,9 @@ class TvShowViewModelFactory private constructor(
             }
             modelClass.isAssignableFrom(TvShowDetailViewModel::class.java) -> {
                 TvShowDetailViewModel(tvShowRepository) as T
+            }
+            modelClass.isAssignableFrom(TvShowFavoriteViewModel::class.java) -> {
+                TvShowFavoriteViewModel(tvShowRepository) as T
             }
             else -> throw Throwable("Uknwon ViewModel Class: ${modelClass.name}")
         }

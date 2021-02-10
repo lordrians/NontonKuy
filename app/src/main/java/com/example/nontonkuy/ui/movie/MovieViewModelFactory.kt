@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.nontonkuy.data.source.repository.MovieRepository
 import com.example.nontonkuy.di.MovieInjection
 import com.example.nontonkuy.ui.movie.detail.MovieDetailViewModel
+import com.example.nontonkuy.ui.movie.favorite.MovieFavoriteViewModel
 import com.example.nontonkuy.ui.movie.main.MovieListViewModel
 
 class MovieViewModelFactory private constructor(
@@ -32,6 +33,9 @@ class MovieViewModelFactory private constructor(
             }
             modelClass.isAssignableFrom(MovieDetailViewModel::class.java) -> {
                 MovieDetailViewModel(movieRepository) as T
+            }
+            modelClass.isAssignableFrom(MovieFavoriteViewModel::class.java) -> {
+                MovieFavoriteViewModel(movieRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: ${modelClass.name}")
         }

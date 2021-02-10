@@ -127,12 +127,19 @@ class TvShowRepository private constructor(
                 }.asLiveData()
         }
 
-        override fun setFavTvShow(TvShow: TvShowEntity, state: Boolean) {
-                TODO("Not yet implemented")
+        override fun setFavTvShow(tvShow: TvShowEntity, state: Boolean) {
+                appExecutors.diskIO().execute {
+                        tvShowLocalDataSource.setFavTvShow(tvShow, state)
+                }
         }
 
         override fun getFavTvShow(): LiveData<PagedList<TvShowEntity>> {
-                TODO("Not yet implemented")
+                val config = PagedList.Config.Builder()
+                        .setEnablePlaceholders(false)
+                        .setInitialLoadSizeHint(4)
+                        .setPageSize(4)
+                        .build()
+                return LivePagedListBuilder(tvShowLocalDataSource.getListFavTvShow(), config).build()
         }
 
 

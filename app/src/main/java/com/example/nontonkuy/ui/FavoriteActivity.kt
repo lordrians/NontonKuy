@@ -21,7 +21,8 @@ class FavoriteActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.tbFavorite)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.tbFavorite.setTitle(R.string.title_favorite)
+//        actionBar?.setDisplayShowHomeEnabled(true)
 
         settingViewPager()
 
@@ -39,7 +40,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            android.R.id.home -> finish()
+            android.R.id.home -> { onBackPressed() }
         }
         return super.onOptionsItemSelected(item)
     }

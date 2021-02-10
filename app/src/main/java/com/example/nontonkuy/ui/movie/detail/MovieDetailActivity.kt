@@ -3,6 +3,8 @@ package com.example.nontonkuy.ui.movie.detail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -23,7 +25,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieDetailBinding
     private lateinit var viewModel: MovieDetailViewModel
     private lateinit var adapter: RecomendationMovieAdapter
-
+    private var menuItem: Menu? = null
     private var idMovie: Int? = null
 
     companion object {
@@ -34,6 +36,10 @@ class MovieDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.tbDetail)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        actionBar?.setDisplayShowHomeEnabled(true)
 
         idMovie = intent?.getIntExtra(ID_MOVIE,0)
 
@@ -55,6 +61,8 @@ class MovieDetailActivity : AppCompatActivity() {
                     if (detail.data != null){
                         showProgressBar(false)
                         fillingData(detail.data)
+                        val state = detail.data.isFav
+                        setupFavState(state)
                     }
                 }
                 Status.ERROR -> {
@@ -63,6 +71,15 @@ class MovieDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setupFavState(state: Boolean) {
+        if (state)
+            menuItem?.getItem(0)?.icon = resources.getDrawable(R.drawable.ic_favorite_fill)
+        else
+            menuItem?.getItem(0)?.icon = resources.getDrawable(R.drawable.ic_favorite_border)
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -113,6 +130,22 @@ class MovieDetailActivity : AppCompatActivity() {
     private fun showProgressBar(state: Boolean){
         binding.rvRecomendedMov.isInvisible = state
         binding.pbMovieDetail.isVisible = state
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        this.menuItem = menu
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+            R.id.action_favorite -> {
+                viewModel.setFavoriteMovie()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
