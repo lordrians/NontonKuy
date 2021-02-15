@@ -67,8 +67,8 @@ class TvShowRemoteDataSource {
                     response: Response<ResponseListTvShow>
             ) {
                 if (response.isSuccessful){
-                    resultsTvShow.value = ApiResponse.success(response.body()?.results as List<ResultsItemListTvShow>)
                     EspressoIdlingResource.decrement()
+                    resultsTvShow.value = ApiResponse.success(response.body()?.results as List<ResultsItemListTvShow>)
                 }
             }
         })

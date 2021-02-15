@@ -67,8 +67,8 @@ class MovieRemoteDataSource {
                 call: Call<ResponseListMovie>,
                 response: Response<ResponseListMovie>
             ) {
-                resultMovies.value = ApiResponse.success(response.body()?.results as List<ResultsItemListMovie>)
                 EspressoIdlingResource.decrement()
+                resultMovies.value = ApiResponse.success(response.body()?.results as List<ResultsItemListMovie>)
             }
         })
         return resultMovies
@@ -81,6 +81,7 @@ class MovieRemoteDataSource {
 
         client.enqueue(object : Callback<ResponseDetailMovie>{
             override fun onFailure(call: Call<ResponseDetailMovie>, t: Throwable) {
+                EspressoIdlingResource.decrement()
                 TODO("Not yet implemented")
             }
 
@@ -88,6 +89,7 @@ class MovieRemoteDataSource {
                 call: Call<ResponseDetailMovie>,
                 response: Response<ResponseDetailMovie>
             ) {
+                EspressoIdlingResource.decrement()
                 resultDetailMovie.value = ApiResponse.success(response.body() as ResponseDetailMovie)
             }
         })
