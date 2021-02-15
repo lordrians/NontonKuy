@@ -1,4 +1,4 @@
-package com.example.nontonkuy.data.source.repository
+package com.example.nontonkuy.data.source.movie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,47 +8,20 @@ import com.example.nontonkuy.data.source.MovieDataSource
 import com.example.nontonkuy.data.source.NetworkBoundResource
 import com.example.nontonkuy.data.source.local.MovieLocalDataSource
 import com.example.nontonkuy.data.source.local.entity.MovieEntity
-import com.example.nontonkuy.utils.ApiResponse
 import com.example.nontonkuy.data.source.remote.movie.MovieRemoteDataSource
 import com.example.nontonkuy.data.source.remote.response.ResponseDetailMovie
 import com.example.nontonkuy.data.source.remote.response.ResultsItemListMovie
+import com.example.nontonkuy.utils.ApiResponse
 import com.example.nontonkuy.utils.AppExecutors
 import com.example.nontonkuy.utils.Resource
 
-class MovieRepository private constructor(
+class FakeMovieRepository constructor(
         private val remoteDataSource: MovieRemoteDataSource,
-        private val movieLocalDataSource: MovieLocalDataSource,
+        private val localDataSource: MovieLocalDataSource,
         private val appExecutors: AppExecutors
-): MovieDataSource {
-
-    companion object {
-        @Volatile
-        private var instance: MovieRepository? = null
-
-        fun getInstance (
-                remoteData: MovieRemoteDataSource,
-                movieLocalDataSource: MovieLocalDataSource,
-                appExecutors: AppExecutors
-        ): MovieRepository =
-                instance
-                        ?: synchronized(this){
-                    instance
-                            ?: MovieRepository(remoteData, movieLocalDataSource, appExecutors)
-                }
-    }
-
+) : MovieDataSource {
     override fun getRecomendation(idMovie: String?): MutableLiveData<ArrayList<ResultsItemListMovie>> {
-        val recomendationMovieResult = MutableLiveData<ArrayList<ResultsItemListMovie>>()
-
-        remoteDataSource.getRecomendationMovie(idMovie, object : MovieRemoteDataSource.LoadRecomendationMovieCallback{
-            override fun onRecomendationLoaded(recomendationMovie: ArrayList<ResultsItemListMovie>?) {
-                if (recomendationMovie != null){
-                    recomendationMovieResult.value = recomendationMovie
-                }
-            }
-        })
-        return  recomendationMovieResult
-
+        TODO("Not yet implemented")
     }
 
     override fun getListMovie(): LiveData<Resource<PagedList<MovieEntity>>> {
@@ -59,17 +32,18 @@ class MovieRepository private constructor(
                     .setInitialLoadSizeHint(4)
                     .setPageSize(4)
                     .build()
-
-                return LivePagedListBuilder(movieLocalDataSource.getListMovie(), config).build()
+                return LivePagedListBuilder(localDataSource.getListMovie(),config).build()
             }
 
-            override fun shouldFetch(data: PagedList<MovieEntity>?): Boolean = data == null || data.isEmpty()
+            override fun shouldFetch(data: PagedList<MovieEntity>?): Boolean =
+                data == null || data.isEmpty()
 
-            override fun createCall(): LiveData<ApiResponse<List<ResultsItemListMovie>>> = remoteDataSource.getListMovie()
+            override fun createCall(): LiveData<ApiResponse<List<ResultsItemListMovie>>> =
+                remoteDataSource.getListMovie()
 
             override fun saveCallResult(data: List<ResultsItemListMovie>) {
-                val movieList = ArrayList<MovieEntity>()
-                for (response in data) {
+                val listMovie = ArrayList<MovieEntity>()
+                for (response in data){
                     val movie = MovieEntity(
                         id = response.id,
                         originalTitle = response.originalTitle,
@@ -80,31 +54,31 @@ class MovieRepository private constructor(
                         posterPath = response.posterPath,
                         isFav = false
                     )
-                    movieList.add(movie)
+                    listMovie.add(movie)
                 }
-                movieLocalDataSource.insertMovies(movieList)
+                localDataSource.insertMovies(listMovie)
             }
         }.asLiveData()
     }
 
     override fun getDetailMovies(idMovie: String?): LiveData<Resource<MovieEntity>> {
-        return object : NetworkBoundResource<MovieEntity, ResponseDetailMovie>(appExecutors) {
-            override fun loadFromDb(): LiveData<MovieEntity> = movieLocalDataSource.getDetailMovie(idMovie)
+        return object : NetworkBoundResource<MovieEntity, ResponseDetailMovie>(appExecutors){
+            override fun loadFromDb(): LiveData<MovieEntity> = localDataSource.getDetailMovie(idMovie)
 
             override fun shouldFetch(data: MovieEntity?): Boolean =
                 data != null &&  data.genres == ""
 
             override fun createCall(): LiveData<ApiResponse<ResponseDetailMovie>> =
-                remoteDataSource.getDetailMovies(idMovie.toString())
+            remoteDataSource.getDetailMovies(idMovie.toString())
 
             override fun saveCallResult(data: ResponseDetailMovie) {
                 var genresAdded = ""
 
                 for (i in data.genres?.indices!!){
-                    if (i < data.genres.size - 1)
-                        genresAdded += data.genres[i]?.name + "; "
+                    if (i < data.genres!!.size - 1)
+                        genresAdded += data.genres!![i]?.name + "; "
                     else
-                        genresAdded += data.genres[i]?.name
+                        genresAdded += data.genres!![i]?.name
                 }
 
                 val movie = MovieEntity(
@@ -120,15 +94,13 @@ class MovieRepository private constructor(
                     revenue = data.revenue,
                     overview = data.overview
                 )
-                movieLocalDataSource.updateMovie(movie, false)
+                localDataSource.updateMovie(movie, false)
             }
         }.asLiveData()
     }
 
     override fun setFavMovie(movie: MovieEntity, state: Boolean) {
-        appExecutors.diskIO().execute {
-            movieLocalDataSource.setFavMovie(movie, state)
-        }
+        localDataSource.setFavMovie(movie, state)
     }
 
     override fun getFavMovie(): LiveData<PagedList<MovieEntity>> {
@@ -138,7 +110,6 @@ class MovieRepository private constructor(
             .setPageSize(4)
             .build()
 
-        return LivePagedListBuilder(movieLocalDataSource.getListFavMovie(), config).build()
+        return LivePagedListBuilder(localDataSource.getListFavMovie(), config).build()
     }
-
 }

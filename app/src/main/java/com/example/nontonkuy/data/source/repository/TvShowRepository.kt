@@ -72,7 +72,7 @@ class TvShowRepository private constructor(
                                 val tvShowList = ArrayList<TvShowEntity>()
                                 for (response in data){
                                         val tvShow = TvShowEntity(
-                                                id = response.id.toString(),
+                                                id = response.id,
                                                 originalName = response.originalName,
                                                 voteAverage = response.voteAverage,
                                                 firstAirDate = response.firstAirDate,
@@ -109,7 +109,7 @@ class TvShowRepository private constructor(
                                 }
 
                                 val tvShow = TvShowEntity(
-                                        id = data.id.toString(),
+                                        id = data.id,
                                         backdropPath = data.backdropPath,
                                         posterPath = data.posterPath,
                                         originalName = data.originalName,

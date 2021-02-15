@@ -23,7 +23,7 @@ data class TvShowEntity (
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "id")
-        val id: String,
+        val id: Int? = null,
 
         @ColumnInfo(name = "number_of_seasons")
         val numberOfSeasons: Int? = null,

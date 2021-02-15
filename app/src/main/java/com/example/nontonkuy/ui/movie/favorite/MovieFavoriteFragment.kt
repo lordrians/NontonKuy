@@ -78,7 +78,7 @@ class MovieFavoriteFragment : Fragment(),MovieAdapter.OnItemClickCallback {
 
     override fun onItemClicked(data: MovieEntity) {
         val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(ID_MOVIE, data.id.toInt())
+        intent.putExtra(ID_MOVIE, data.id)
         context?.startActivity(intent)
     }
 }
