@@ -12,7 +12,7 @@ object MovieInjection {
 
         val database = NontonKuyDatabase.getInstance(mContext)
 
-        val remoteDataSource = MovieRemoteDataSource.getInstance()
+        val remoteDataSource = MovieRemoteDataSource.getInstance(mContext)
         val localDataSource = MovieLocalDataSource.getInstance(database.movieDao())
         val appExecutors = AppExecutors()
         return MovieRepository.getInstance(remoteDataSource,localDataSource,appExecutors)

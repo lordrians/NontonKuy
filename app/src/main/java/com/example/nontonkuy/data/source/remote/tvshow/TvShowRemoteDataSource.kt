@@ -1,8 +1,11 @@
 package com.example.nontonkuy.data.source.remote.tvshow
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.nontonkuy.data.source.remote.movie.MovieRemoteDataSource
 import com.example.nontonkuy.utils.ApiResponse
 import com.example.nontonkuy.data.source.remote.response.ResponseDetailTvShow
 import com.example.nontonkuy.data.source.remote.response.ResponseListTvShow
@@ -18,13 +21,16 @@ class TvShowRemoteDataSource {
     companion object {
         @Volatile
         private var instance: TvShowRemoteDataSource? = null
+        private var mContext: Context? = null
 
-        fun getInstance(): TvShowRemoteDataSource =
+        fun getInstance(mContext: Context): TvShowRemoteDataSource {
+            this.mContext = mContext
+            return instance ?: synchronized(this){
                 instance
-                        ?: synchronized(this){
-                    instance
-                            ?: TvShowRemoteDataSource()
-                }
+                        ?: TvShowRemoteDataSource()
+            }
+        }
+
     }
 
     fun getRecomendation(idTvShow: String?, callback : LoadRecomendationTvShowCallback){
@@ -32,7 +38,7 @@ class TvShowRemoteDataSource {
         val client = ApiConfig.getApiService().getRecomendationTvShow(idTvShow)
         client.enqueue(object : Callback<ResponseListTvShow>{
             override fun onFailure(call: Call<ResponseListTvShow>, t: Throwable) {
-                Log.d("TvShowRemoteDataSource", t.message.toString())
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<ResponseListTvShow>, response: Response<ResponseListTvShow>) {
@@ -41,7 +47,7 @@ class TvShowRemoteDataSource {
                     callback.onRecomendationiLoaded(response.body()?.results)
                 } else {
                     EspressoIdlingResource.decrement()
-                    Log.d("TvShowRemoteDataSource", response.message())
+                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -59,7 +65,7 @@ class TvShowRemoteDataSource {
         client.enqueue(object : Callback<ResponseListTvShow>{
             override fun onFailure(call: Call<ResponseListTvShow>, t: Throwable) {
                 EspressoIdlingResource.decrement()
-                Log.d("TvShowRemoteDataSource", "onFailure: ${t.message.toString()}")
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -69,7 +75,8 @@ class TvShowRemoteDataSource {
                 if (response.isSuccessful){
                     EspressoIdlingResource.decrement()
                     resultsTvShow.value = ApiResponse.success(response.body()?.results as List<ResultsItemListTvShow>)
-                }
+                } else
+                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show()
             }
         })
         return resultsTvShow
@@ -82,7 +89,7 @@ class TvShowRemoteDataSource {
         client.enqueue(object : Callback<ResponseDetailTvShow>{
             override fun onFailure(call: Call<ResponseDetailTvShow>, t: Throwable) {
                 EspressoIdlingResource.decrement()
-                Log.d("TvShowRemoteDataSource", t.message.toString())
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<ResponseDetailTvShow>, response: Response<ResponseDetailTvShow>) {
@@ -91,7 +98,7 @@ class TvShowRemoteDataSource {
                     resultDetailMovie.value = ApiResponse.success(response.body() as ResponseDetailTvShow)
                 } else {
                     EspressoIdlingResource.decrement()
-                    Log.d("TvShowRemoteDataSource", response.message())
+                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
         })

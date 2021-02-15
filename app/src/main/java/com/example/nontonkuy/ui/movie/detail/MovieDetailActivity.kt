@@ -117,10 +117,14 @@ class MovieDetailActivity : AppCompatActivity() {
         val viewModels = ViewModelProvider(this, factory)[MovieDetailViewModel::class.java]
 
         viewModels.getRecomendationMovie(idMovie.toString()).observe(this){listRecomendation ->
-            adapter = RecomendationMovieAdapter(listRecomendation)
-            adapter.notifyDataSetChanged()
-            binding.rvRecomendedMov.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            binding.rvRecomendedMov.adapter = adapter
+            if (listRecomendation.size > 0){
+                adapter = RecomendationMovieAdapter(listRecomendation)
+                adapter.notifyDataSetChanged()
+                binding.rvRecomendedMov.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                binding.rvRecomendedMov.adapter = adapter
+
+            } else
+                Toast.makeText(this, resources.getString(R.string.there_is_no_data_laoded) + " in recomendation", Toast.LENGTH_SHORT).show()
 
             setVisible(binding.rvRecomendedMov)
             setGone(binding.pbMovieDetailRec)

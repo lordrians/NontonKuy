@@ -125,7 +125,7 @@ class TvShowDetailActivity : AppCompatActivity() {
                 setGone(binding.pbTvshowDetailRec)
             } else {
                 setGone(binding.pbTvshowDetailRec)
-                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"onFailure:" + resources.getString(R.string.there_is_no_data_laoded) + "on recemendation", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -13,7 +13,7 @@ object TvShowInjection {
         val database = NontonKuyDatabase.getInstance(mContext)
 
 
-        val remoteDataSource = TvShowRemoteDataSource.getInstance()
+        val remoteDataSource = TvShowRemoteDataSource.getInstance(mContext)
         val localDataSource = TvShowLocalDataSource.getInstance(database.tvShowDao())
         val appExecutors = AppExecutors()
         return TvShowRepository.getInstance(remoteDataSource, localDataSource, appExecutors)

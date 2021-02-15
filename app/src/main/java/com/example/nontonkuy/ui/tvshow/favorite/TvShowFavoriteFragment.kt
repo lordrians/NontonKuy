@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -53,7 +54,8 @@ class TvShowFavoriteFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
                 tvShowAdapter.submitList(listFavorite)
                 tvShowAdapter.setOnItemClickCallback(this)
                 tvShowAdapter.notifyDataSetChanged()
-            }
+            } else
+                Toast.makeText(context, resources.getString(R.string.there_is_no_data_laoded )+ " in favorite", Toast.LENGTH_SHORT).show()
         })
 
         binding.rvFavTvshow.layoutManager = context?.let { setGridPixel(it) }?.let { GridLayoutManager(context, it) }

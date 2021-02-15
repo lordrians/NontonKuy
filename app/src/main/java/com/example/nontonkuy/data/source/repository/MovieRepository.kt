@@ -42,9 +42,7 @@ class MovieRepository private constructor(
 
         remoteDataSource.getRecomendationMovie(idMovie, object : MovieRemoteDataSource.LoadRecomendationMovieCallback{
             override fun onRecomendationLoaded(recomendationMovie: ArrayList<ResultsItemListMovie>?) {
-                if (recomendationMovie != null){
-                    recomendationMovieResult.value = recomendationMovie
-                }
+                recomendationMovieResult.value = recomendationMovie
             }
         })
         return  recomendationMovieResult

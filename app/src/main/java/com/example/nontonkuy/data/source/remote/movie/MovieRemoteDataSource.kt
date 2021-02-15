@@ -1,8 +1,11 @@
 package com.example.nontonkuy.data.source.remote.movie
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.nontonkuy.data.source.MovieDataSource
 import com.example.nontonkuy.utils.ApiResponse
 import com.example.nontonkuy.data.source.remote.response.ResponseDetailMovie
 import com.example.nontonkuy.data.source.remote.response.ResponseListMovie
@@ -15,16 +18,19 @@ import retrofit2.Response
 
 class MovieRemoteDataSource {
 
+
     companion object {
         @Volatile
         private var instance: MovieRemoteDataSource? = null
+        private var mContext: Context? = null
 
-        fun getInstance(): MovieRemoteDataSource =
-                instance
-                        ?: synchronized(this){
-                    instance
-                            ?: MovieRemoteDataSource()
-                }
+        fun getInstance(mContext: Context): MovieRemoteDataSource{
+            this.mContext = mContext
+            return instance ?: synchronized(this){
+                instance ?: MovieRemoteDataSource()
+            }
+        }
+
     }
 
     fun getRecomendationMovie(idMovie: String?, callback: LoadRecomendationMovieCallback){
@@ -32,7 +38,7 @@ class MovieRemoteDataSource {
         val client = ApiConfig.getApiService().getRecomendationMovie(idMovie)
         client.enqueue(object : Callback<ResponseListMovie>{
             override fun onFailure(call: Call<ResponseListMovie>, t: Throwable) {
-                Log.d("MovieRemoteData", t.message.toString())
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<ResponseListMovie>, response: Response<ResponseListMovie>) {
@@ -41,7 +47,7 @@ class MovieRemoteDataSource {
                     callback.onRecomendationLoaded(response.body()?.results)
                 } else {
                     EspressoIdlingResource.decrement()
-                    Log.d("MovieRemoteData", response.message())
+                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -59,8 +65,8 @@ class MovieRemoteDataSource {
 
         client.enqueue(object : Callback<ResponseListMovie>{
             override fun onFailure(call: Call<ResponseListMovie>, t: Throwable) {
-                Log.e("MovieRemoteDataSource", "onFailure : ${t.message}")
                 EspressoIdlingResource.decrement()
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -82,7 +88,7 @@ class MovieRemoteDataSource {
         client.enqueue(object : Callback<ResponseDetailMovie>{
             override fun onFailure(call: Call<ResponseDetailMovie>, t: Throwable) {
                 EspressoIdlingResource.decrement()
-                TODO("Not yet implemented")
+                Toast.makeText(mContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
